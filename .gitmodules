@@ -1,0 +1,4 @@
+[submodule "docker_containers"]
+	path = docker_containers
+	url = https://github.com/shahcompbio/docker_containers.git
+	branch = Script
