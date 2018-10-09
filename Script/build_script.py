@@ -6,6 +6,7 @@ if __name__ == "__main__":
 	local_repo = Repo(os.getcwd())
 	branch = local_repo.active_branch
 	print branch.name
+	print ("whats going on")
 	'''VERSION_NOT_FOUND = True
 	while VERSION_NOT_FOUND:
 		try:
