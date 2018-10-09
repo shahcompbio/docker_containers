@@ -6,7 +6,7 @@ if __name__ == "__main__":
 	local_repo = Repo(os.getcwd())
 	branch = local_repo.active_branch
 	print branch.name
-	VERSION_NOT_FOUND = True
+	'''VERSION_NOT_FOUND = True
 	while VERSION_NOT_FOUND:
 		try:
 			subprocess.call(["ls", "VERSION"])
@@ -16,7 +16,7 @@ if __name__ == "__main__":
 			VERSION_NOT_FOUND = False
 		except OSError:
 			subprocess.call(["cd", ".."])
-	'''subprocess.call(["ls", "-l"])
+	subprocess.call(["ls", "-l"])
 	with open("~/" + branch.name + "/" + "VERSION", "r") as version_file:
 		data = version_file.read()
 	print("Current VERSION is: " + data)
