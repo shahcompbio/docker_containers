@@ -1,14 +1,14 @@
 import subprocess
-#from git import Git, Repo
+from git import Git, Repo
 import os
 
 if __name__ == "__main__":
 	print python.__version__
-	'''local_repo = Repo(os.getcwd())
+	local_repo = Repo(os.getcwd())
 	branch = local_repo.active_branch
 	print branch.name
 	print ("whats going on")
-	VERSION_NOT_FOUND = True
+	'''VERSION_NOT_FOUND = True
 	while VERSION_NOT_FOUND:
 		try:
 			subprocess.call(["ls", "VERSION"])
