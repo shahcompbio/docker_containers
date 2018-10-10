@@ -14,8 +14,7 @@ if __name__ == "__main__":
 	new_version = str(tags[-1]).split('-')[1]
 
 	try:
-		subprocess.call(["cd", folder_name])
-		with open ("VERSION", "w") as f:
+		with open (folder_name + "/VERSION", "w") as f:
 			f.seek(0)
 			f.write(new_version)
 			f.truncate()
