@@ -2,11 +2,26 @@ import subprocess
 from git import Git, Repo
 import os
 
+#Tag convertion should go: FOLDER_NAME-Version_Number
+#Example: bwa-0.0.1
 if __name__ == "__main__":
+
 	print os.getcwd()
 	repo = Repo(os.getcwd())
 	tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
 	print (tags[-1])
+	folder_name = str(tags[-1]).split('-')[0].lower()
+	new_version = str(tags[-1]).split('-')[1]
+
+	try:
+		subprocess.call(["cd", folder_name])
+		with open ("VERSION", "w") as f:
+			f.seek(0)
+			f.write(new_version)
+			f.truncate()
+	except (OSError, IOError) as e:
+		print (e)
+
 	'''VERSION_NOT_FOUND = True
 	while VERSION_NOT_FOUND:
 		try:
