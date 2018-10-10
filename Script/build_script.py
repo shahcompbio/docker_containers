@@ -20,10 +20,10 @@ if __name__ == "__main__":
 		print (e)
 
 	try:
-		subprocess.call(["cd", folder_name])
-		subprocess.call(["ls"])
+		subprocess.call(["docker" , "login", "-u", username, "--password", password])
 	except OSError as e:
 		print (e)
+
 
 	print (username, password)
 
