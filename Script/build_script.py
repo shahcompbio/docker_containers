@@ -3,7 +3,6 @@ from git import Git, Repo
 import os
 
 if __name__ == "__main__":
-	print python.__version__
 	local_repo = Repo(os.getcwd())
 	branch = local_repo.active_branch
 	print branch.name
