@@ -3,10 +3,10 @@ from git import Git, Repo
 import os
 
 if __name__ == "__main__":
-	local_repo = Repo(os.getcwd())
-	branch = local_repo.active_branch
-	print branch.name
-	print ("whats going on")
+	print os.getcwd()
+	repo = Repo(os.getcwd())
+	tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
+	print (tags[-1])
 	'''VERSION_NOT_FOUND = True
 	while VERSION_NOT_FOUND:
 		try:
