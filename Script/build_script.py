@@ -20,12 +20,15 @@ if __name__ == "__main__":
 		print (e)
 
 	try:
-		subprocess.call(["docker" , "login", "shahlab.azurecr.io", "-u", username, "--password", password])
+		subprocess.call(["docker" , "login", "singlecellcontainers.azurecr.io", "-u", username, "--password", password])
+		subprocess.call(["docker", "build", "-t", folder_name])
+		subprocess.call(["docker", "tag", "singlecellcontainers.azurecr.io/scp/" + folder_name + ":" + new_version])
+		subprocess.call(["docker", "push", "singlecellcontainers.azurecr.io/scp/" + folder_name + ":" + new_version])
+		print ("Done docker steps")
 	except OSError as e:
 		print (e)
 
 
-	print (username, password)
 
 	'''VERSION_NOT_FOUND = True
 	while VERSION_NOT_FOUND:
