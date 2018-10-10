@@ -20,7 +20,7 @@ if __name__ == "__main__":
 		print (e)
 
 	try:
-		subprocess.call(["docker" , "login", "-u", username, "--password", password])
+		subprocess.call(["docker" , "login", "shahlab.azurecr.io", "-u", username, "--password", password])
 	except OSError as e:
 		print (e)
 
