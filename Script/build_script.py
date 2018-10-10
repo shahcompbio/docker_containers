@@ -14,12 +14,18 @@ if __name__ == "__main__":
 	new_version = str(tags[-1]).split('-')[1]
 
 	try:
-		with open (folder_name + "/VERSION", "w") as f:
-			f.seek(0)
-			f.write(new_version)
-			f.truncate()
-	except (OSError, IOError) as e:
+		username = os.environ['CLIENT_ID']
+		password = os.environ['SECRET_KEY']
+	except (KeyError) as e:
 		print (e)
+
+	try:
+		subprocess.call(["cd", folder_name])
+		subprocess.call(["ls"])
+	except OSError as e:
+		print (e)
+
+	print (username, password)
 
 	'''VERSION_NOT_FOUND = True
 	while VERSION_NOT_FOUND:
