@@ -27,16 +27,19 @@ if __name__ == "__main__":
 	#docker_push_cmd = 
 	try:
 		subprocess.call(["docker" , "login", "singlecellcontainers.azurecr.io", "-u", username, "--password", password])
-		output = subprocess.check_output("{}; {}".format("cd " + folder_name, "docker build -t " + folder_name + " ."), shell=True)
+		subprocess.call("{}; {}".format("cd " + folder_name, "docker build -t " + folder_name + " ."), shell=True)
+		print ("Finished Build")
 
 		#############################################################################################
 		#         																					#
 		# Might be a better way to do this. Don't really feel comfortable using hardcoded numbers   #
 		#																							#
 		#############################################################################################
-		build_id = output.splitlines()[-2].split()[-1] #Build ID is the last string in the second last line of terminal output after running docker build
+		#build_id = output.splitlines()[-2].split()[-1] #Build ID is the last string in the second last line of terminal output after running docker build
 
-		subprocess.call(["docker", "tag", build_id, "singlecellcontainers.azurecr.io/scp/" + folder_name + ":" + new_version])
+		subprocess.call(["docker", "tag", folder_name, "singlecellcontainers.azurecr.io/scp/" + folder_name + ":" + new_version])
+		print("Finished Tagging")
+		
 		subprocess.call(["docker", "push", "singlecellcontainers.azurecr.io/scp/" + folder_name + ":" + new_version])
 	except OSError as e:
 		print (e)
