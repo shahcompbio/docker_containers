@@ -2,14 +2,15 @@ import subprocess
 from git import Git, Repo
 import os
 
+
 def get_immediate_subdirectories(a_dir):
     return [name for name in os.listdir(a_dir)
             if os.path.isdir(os.path.join(a_dir, name))]
+
 #Tag convertion should go: FOLDER_NAME-Version_Number
 #Example: bwa-0.0.1
 if __name__ == "__main__":
 
-	#list_of_all_dirs = []
 	#Test Registry. Change to Actual Registry when code is in production
 	registry_url = "singlecellcontainers.azurecr.io"
 	list_of_all_dirs = get_immediate_subdirectories(os.getcwd())
