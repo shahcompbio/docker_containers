@@ -18,8 +18,6 @@ if __name__ == "__main__":
 	repo = Repo(os.getcwd())
 	tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
 
-	print tags[-1]
-
 	#Checks for tag formatting
 	if(len(str(tags[-1]).split('-')) == 2):
 		folder_name = str(tags[-1]).split('-')[0].lower()
@@ -43,9 +41,12 @@ if __name__ == "__main__":
 	#Runs the docker commands
 	try:
 		code = subprocess.call(["docker" , "login", registry_url, "-u", username, "--password", password])
-		print code
-		'''subprocess.call("{}; {}".format("cd " + folder_name, "docker build -t " + folder_name + " ."), shell=True)
+		if(code != 0):
+			print ("Invalid login credentials. Exiting script...")
+			quit()
+
+		subprocess.call("{}; {}".format("cd " + folder_name, "docker build -t " + folder_name + " ."), shell=True)
 		subprocess.call(["docker", "tag", folder_name, registry_url + "/scp/" + folder_name + ":" + new_version])
-		subprocess.call(["docker", "push", registry_url + "/scp/" + folder_name + ":" + new_version])'''
+		subprocess.call(["docker", "push", registry_url + "/scp/" + folder_name + ":" + new_version])
 	except OSError as e:
 		print (e)
