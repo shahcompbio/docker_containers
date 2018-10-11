@@ -2,7 +2,7 @@ import subprocess
 from git import Git, Repo
 import os
 
-
+#Taken from StackOverflow LOL
 def get_immediate_subdirectories(a_dir):
     return [name for name in os.listdir(a_dir)
             if os.path.isdir(os.path.join(a_dir, name))]
@@ -10,11 +10,11 @@ def get_immediate_subdirectories(a_dir):
 #Tag convertion should go: FOLDER_NAME-Version_Number
 #Example: bwa-0.0.1
 if __name__ == "__main__":
-
 	#Test Registry. Change to Actual Registry when code is in production
 	registry_url = "singlecellcontainers.azurecr.io"
+
+	#Gets the tags from the repository
 	list_of_all_dirs = get_immediate_subdirectories(os.getcwd())
-	print list_of_all_dirs
 	repo = Repo(os.getcwd())
 	tags = sorted(repo.tags, key=lambda t: t.commit.committed_datetime)
 
@@ -37,7 +37,8 @@ if __name__ == "__main__":
 	except (KeyError) as e:
 		print (e)
 
-	#TODO Error Handling
+	#TODO Error Handling: How to handle if login credentials are invalid?
+	#Runs the docker commands
 	try:
 		subprocess.call(["docker" , "login", registry_url, "-u", username, "--password", password])
 		subprocess.call("{}; {}".format("cd " + folder_name, "docker build -t " + folder_name + " ."), shell=True)
