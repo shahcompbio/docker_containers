@@ -37,7 +37,7 @@ if __name__ == "__main__":
 	except (KeyError) as e:
 		print (e)
 
-	#TODO Error Handling: How to handle if login credentials are invalid?
+
 	#Runs the docker commands
 	try:
 		code = subprocess.call(["docker" , "login", registry_url, "-u", username, "--password", password])
