@@ -44,7 +44,6 @@ if __name__ == "__main__":
 		if(code != 0):
 			print ("Invalid login credentials. Exiting script...")
 			quit()
-
 		subprocess.call("{}; {}".format("cd " + folder_name, "docker build -t " + folder_name + " ."), shell=True)
 		subprocess.call(["docker", "tag", folder_name, registry_url + "/scp/" + folder_name + ":" + new_version])
 		subprocess.call(["docker", "push", registry_url + "/scp/" + folder_name + ":" + new_version])
