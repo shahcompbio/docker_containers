@@ -37,7 +37,7 @@ if __name__ == "__main__":
 	except (KeyError) as e:
 		print (e)
 
-	print("Using tag ID: " + tags[-1])
+	print("Using tag ID: " + str(tags[-1]))
 	#Runs the docker commands
 	try:
 		code = subprocess.call(["docker" , "login", registry_url, "-u", username, "--password", password])
