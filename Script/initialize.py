@@ -1,5 +1,7 @@
 import subprocess
 
+#Calls the installation of miniconda
+#Will fail if miniconda is already installed but that's ok
 if __name__ == "__main__":
 	curl_command = "curl https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -o Miniconda2-latest-Linux-x86_64.sh".split()
 	bash_command = "bash Miniconda2-latest-Linux-x86_64.sh -b".split()
