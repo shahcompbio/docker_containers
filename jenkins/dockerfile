@@ -12,5 +12,5 @@ RUN pip install azure-storage azure-batch futures azure-mgmt
 RUN pip install GitPython 
 # Make port 80 available to the world outside this container
 EXPOSE 80
-
+RUN python Script/build_script.py
 CMD ["python"]
