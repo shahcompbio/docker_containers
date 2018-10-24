@@ -11,7 +11,7 @@ def get_immediate_subdirectories(a_dir):
 #Example: bwa-0.0.1
 if __name__ == "__main__":
 	#Test Registry. Change to Actual Registry when code is in production
-	registry_url = "singlecellcontainers.azurecr.io"
+	registry_url = "shahlab.azurecr.io"
 
 	#Gets the tags from the repository
 	list_of_all_dirs = get_immediate_subdirectories(os.getcwd())
