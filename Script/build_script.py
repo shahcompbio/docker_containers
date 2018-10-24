@@ -47,5 +47,6 @@ if __name__ == "__main__":
 		subprocess.call("{}; {}".format("cd " + folder_name, "docker build -t " + folder_name + " ."), shell=True)
 		subprocess.call(["docker", "tag", folder_name, registry_url + "/scp/" + folder_name + ":" + new_version])
 		subprocess.call(["docker", "push", registry_url + "/scp/" + folder_name + ":" + new_version])
+		print("Done")
 	except OSError as e:
 		print (e)
