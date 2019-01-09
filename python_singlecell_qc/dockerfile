@@ -11,6 +11,7 @@ RUN pip install azure-storage azure-batch futures azure-mgmt
 RUN pip install azure.storage.common
 RUN pip install azure.keyvault
 RUN conda install -c bioconda bx-python
+RUN pip install boto3
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
