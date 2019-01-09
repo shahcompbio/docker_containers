@@ -5,10 +5,6 @@ FROM continuumio/miniconda
 # Install basic packages
 RUN apt-get update && apt-get install -y libltdl7 && rm -rf /var/lib/apt/lists/*
 RUN conda update -y conda
-RUN conda install -c dill networkx numpy scipy pandas seaborn matplotlib statsmodels pyyaml pytables scikit-learn
-RUN conda install -c bioconda pysam pyvcf
-RUN conda install -c conda-forge pypdf2 pika
-RUN pip install azure-storage azure-batch futures azure-mgmt
 RUN pip install GitPython 
 RUN pip install awscli --upgrade
 # Make port 80 available to the world outside this container
