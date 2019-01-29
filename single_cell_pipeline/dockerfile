@@ -1,5 +1,5 @@
 # build on top of out base image
-FROM shahlab.azurecr.io/scp/python_singlecell_qc:v0.0.1
+FROM shahlab.azurecr.io/scp/python_singlecell_qc:v0.0.4
 
 # Set the working directory to /app
 WORKDIR /datadrive/singlecell/docker/app
@@ -8,8 +8,8 @@ WORKDIR /datadrive/singlecell/docker/app
 ADD . /app
 
 # Install any needed packages specified in requirements.txt
-RUN export GIT_SSL_NO_VERIFY=1 && pip install git+https://dgrewal@svn.bcgsc.ca/bitbucket/scm/sc/single_cell_pipeline.git@master
-RUN pip install git+https://dgrewal@bitbucket.org/dranew/pypeliner.git@master
+RUN pip install git+https://github.com/shahcompbio/single_cell_pipeline.git@master
+RUN pip install git+https://dgrewal@bitbucket.org/dranew/pypeliner.git@dev_staging
 RUN pip install git+https://bitbucket.org/aroth85/biowrappers.git@singlecell
 # Make port 80 available to the world outside this container
 EXPOSE 80
