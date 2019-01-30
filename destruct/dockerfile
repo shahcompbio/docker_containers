@@ -1,0 +1,21 @@
+# build on top of out base image
+FROM shahlab.azurecr.io/scp/python_singlecell_qc:v0.0.4
+
+# Copy the current directory contents into the container at /app
+ADD . /app
+
+# Install any needed packages specified in requirements.txt
+RUN conda install -c bioconda -c dranew destruct blossomv -y
+RUN rm -rf /opt/conda/lib/python2.7/site-packages/pypeliner* /opt/conda/lib/python2.7/site-packages/destruct*
+RUN pip install git+https://github.com/shahcompbio/single_cell_pipeline.git@master
+RUN pip install git+https://dgrewal@bitbucket.org/dranew/pypeliner.git@dev_staging
+RUN pip install git+https://bitbucket.org/aroth85/biowrappers.git@singlecell
+RUN cd /app && git clone -b single_cell https://bitbucket.org/dranew/destruct.git && cd ./destruct && python setup.py install
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# Define environment variable
+ENV NAME destruct
+
+# Run app.py when the container launches
+CMD ["python"]
