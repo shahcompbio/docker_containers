@@ -11,6 +11,7 @@ RUN pip install git+https://github.com/shahcompbio/single_cell_pipeline.git@mast
 RUN pip install git+https://dgrewal@bitbucket.org/dranew/pypeliner.git@dev_staging
 RUN pip install git+https://bitbucket.org/aroth85/biowrappers.git@singlecell
 RUN cd /app && git clone -b single_cell https://bitbucket.org/dranew/destruct.git && cd ./destruct && python setup.py install
+RUN pip install 'python-louvain<0.9'
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
