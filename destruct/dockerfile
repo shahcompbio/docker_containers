@@ -8,9 +8,9 @@ ADD . /app
 RUN conda install -c bioconda -c dranew destruct blossomv -y
 RUN rm -rf /opt/conda/lib/python2.7/site-packages/pypeliner* /opt/conda/lib/python2.7/site-packages/destruct*
 RUN pip install git+https://github.com/shahcompbio/single_cell_pipeline.git@master
-RUN pip install git+https://dgrewal@bitbucket.org/dranew/pypeliner.git@dev_staging
+RUN pip install git+https://github.com/shahcompbio/pypeliner.git@master
 RUN pip install git+https://bitbucket.org/aroth85/biowrappers.git@singlecell
-RUN cd /app && git clone -b single_cell https://bitbucket.org/dranew/destruct.git && cd ./destruct && python setup.py install
+RUN pip install git+https://github.com/amcpherson/destruct.git@master
 RUN pip install 'python-louvain<0.9'
 # Make port 80 available to the world outside this container
 EXPOSE 80
