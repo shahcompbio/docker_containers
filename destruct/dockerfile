@@ -1,5 +1,5 @@
 # build on top of out base image
-FROM shahlab.azurecr.io/scp/python_singlecell_qc:v0.0.4
+FROM shahlab.azurecr.io/scp/python_singlecell_qc:v0.0.5
 
 # Copy the current directory contents into the container at /app
 ADD . /app
@@ -11,7 +11,6 @@ RUN pip install git+https://github.com/shahcompbio/single_cell_pipeline.git@mast
 RUN pip install git+https://github.com/shahcompbio/pypeliner.git@master
 RUN pip install git+https://bitbucket.org/aroth85/biowrappers.git@singlecell
 RUN pip install git+https://github.com/amcpherson/destruct.git@master
-RUN pip install 'python-louvain<0.9'
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
