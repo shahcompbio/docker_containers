@@ -2,9 +2,9 @@
 FROM continuumio/miniconda
 
 # Install any needed packages specified in requirements.txt
-RUN conda install -c bioconda -c conda-forge lumpy-sv
+RUN apt-get update && apt install autoconf make gcc zlib1g-dev  libcurl3-dev libssl-dev g++ -y && rm -rf /var/lib/apt/lists/*
+RUN git clone --recursive https://github.com/arq5x/lumpy-sv.git && cd ./lumpy-sv && make && cp bin/* /usr/local/bin/.
 RUN conda install -c bioconda samtools
-RUN conda install -c conda-forge cryptography
 # Define environment variable
 #ENV NAME lumpy
 
