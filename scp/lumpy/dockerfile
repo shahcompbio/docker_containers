@@ -3,7 +3,7 @@ FROM continuumio/miniconda
 
 # Install any needed packages specified in requirements.txt
 RUN apt-get update && apt install autoconf make gcc zlib1g-dev  libcurl3-dev libssl-dev g++ -y && rm -rf /var/lib/apt/lists/*
-RUN git clone --recursive https://github.com/arq5x/lumpy-sv.git && cd ./lumpy-sv && make && cp bin/* /usr/local/bin/.
+RUN git clone --recursive https://github.com/arq5x/lumpy-sv.git && cd ./lumpy-sv && make && cp bin/* /usr/local/bin/. && cp ./scripts/extractSplitReads_BwaMem /usr/local/bin/.
 RUN conda install -c bioconda samtools
 # Define environment variable
 #ENV NAME lumpy
