@@ -201,9 +201,9 @@ def docker_build_and_push_container(
 
     os.chdir(currentdir)
 
-def check_aws_repository():
-    command=['aws', 'ecr', 'describe-repositories', '--repository-names']
-    print "\n CHECKING IF REPO EXIST"
+def check_aws_repository(container_name):
+    command=['aws', 'ecr', 'describe-repositories', '--repository-names',container_name.replace('scp/','')]
+    print "\n CHECKING IF REPO EXIST" + container_name
     print run_cmd(command)
 
 def main(args):
@@ -221,7 +221,7 @@ def main(args):
 
     if args.push_to_aws:
         aws_registry = log_into_aws_acr(args.tempdir)
-        check_aws_repository()
+        check_aws_repository(container)
         docker_build_and_push_container(
             container, aws_registry, new_version, container_name_prefix
         )
