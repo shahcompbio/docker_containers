@@ -148,10 +148,6 @@ def log_into_aws_acr(tempdir):
     makedirs(tempdir)
     stdoutfile = os.path.join(tempdir, 'aws_login_output.txt')
 
-    command = ['aws', 'ecr', 'describe-repositories']
-    print "\n CHECKING IF REPO EXIST"
-    print run_cmd(command)
-
     login_command = ['aws', 'ecr', 'get-login', '--no-include-email']
     run_cmd(login_command, output=stdoutfile)
 
@@ -221,7 +217,15 @@ def main(args):
 
     if args.push_to_aws:
         aws_registry = log_into_aws_acr(args.tempdir)
-        check_aws_repository(container)
+
+        command = ['aws', 'ecr', 'describe-repositories']
+        print "\n CHECKING IF REPO EXIST"
+        print run_cmd(command)
+
+        command = ['aws', 'ecr', 'describe-repositories', '--repository-names', container]
+        print "\n CHECKING IF REPO EXIST MUSQ"
+        print run_cmd(command)
+
         docker_build_and_push_container(
             container, aws_registry, new_version, container_name_prefix
         )
