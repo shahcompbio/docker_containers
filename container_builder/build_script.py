@@ -1,6 +1,5 @@
 import os
 import errno
-import subprocess
 import warnings
 import argparse
 from git import Git, Repo
