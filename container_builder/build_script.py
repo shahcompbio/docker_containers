@@ -148,6 +148,10 @@ def log_into_aws_acr(tempdir):
     makedirs(tempdir)
     stdoutfile = os.path.join(tempdir, 'aws_login_output.txt')
 
+    command = ['aws', 'ecr', 'describe-repositories']
+    print "\n CHECKING IF REPO EXIST"
+    print run_cmd(command)
+
     login_command = ['aws', 'ecr', 'get-login', '--no-include-email']
     run_cmd(login_command, output=stdoutfile)
 
@@ -201,13 +205,6 @@ def docker_build_and_push_container(
 
     os.chdir(currentdir)
 
-def check_aws_repository(container_name):
-    try:
-        command=['aws', 'ecr', 'describe-repositories', '--repository-names',container_name]
-        print "\n CHECKING IF REPO EXIST" + container_name
-        print run_cmd(command)
-    except:
-        pass
 
 def main(args):
     container, new_version = get_latest_tag()
