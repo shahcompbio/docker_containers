@@ -210,8 +210,6 @@ def check_aws(container_name):
         print "Creating Container Repository {}.".format(container_name)
         run_cmd(['aws', 'ecr', 'create-repository', '--repository-name', container_name])
 
-    print Popen(['aws', 'ecr', 'describe-repositories'], stdout=PIPE).communicate()[0]
-
 def main(args):
     container, new_version = get_latest_tag()
 
