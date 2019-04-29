@@ -1,5 +1,6 @@
 import os
 import errno
+import subprocess
 import warnings
 import argparse
 from git import Git, Repo
@@ -220,12 +221,13 @@ def main(args):
 
         command = ['aws', 'ecr', 'describe-repositories']
         print "\n CHECKING IF REPO EXIST"
-        print os.subprocess.check_output(command)
-
+        output = Popen(command, stdout=PIPE).communicate()[0]
+        print output
 
         command = ['aws', 'ecr', 'describe-repositories', '--repository-names', container]
         print "\n CHECKING IF REPO EXIST MUSQ"
-        print os.subprocess.check_output(command)
+        output = Popen(command, stdout=PIPE).communicate()[0]
+        print output
 
         docker_build_and_push_container(
             container, aws_registry, new_version, container_name_prefix
