@@ -155,10 +155,10 @@ def log_into_aws_acr(tempdir):
     login_command = open(stdoutfile).readlines()
     assert len(login_command) == 1
     login_command = login_command[0].split()
-
+    print login_command
     registry_url = login_command[-1]
-
-    run_cmd(login_command)
+    print registry_url
+    print run_cmd(login_command)
 
     # docker doesnt like https in url
     registry_url = registry_url.replace('https://', '')
