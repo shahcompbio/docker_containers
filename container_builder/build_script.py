@@ -203,6 +203,7 @@ def docker_build_and_push_container(
 
 def check_aws_repository():
     command=['aws', 'ecr', 'describe-repositories', '--repository-names']
+    print "\n CHECKING IF REPO EXIST"
     print run_cmd(command)
 
 def main(args):
