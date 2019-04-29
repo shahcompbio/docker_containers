@@ -150,15 +150,14 @@ def log_into_aws_acr(tempdir):
 
     login_command = ['aws', 'ecr', 'get-login', '--no-include-email']
     run_cmd(login_command, output=stdoutfile)
-    print "\nREADING LINES\n"
-    print open(stdoutfile).readlines()
+
     login_command = open(stdoutfile).readlines()
     assert len(login_command) == 1
     login_command = login_command[0].split()
-    print login_command
+
     registry_url = login_command[-1]
-    print registry_url
-    print run_cmd(login_command)
+
+    run_cmd(login_command)
 
     # docker doesnt like https in url
     registry_url = registry_url.replace('https://', '')
@@ -202,6 +201,9 @@ def docker_build_and_push_container(
 
     os.chdir(currentdir)
 
+def check_aws_repository():
+    command=['aws', 'ecr', 'describe-repositories', '--repository-names']
+    print run_cmd(command)
 
 def main(args):
     container, new_version = get_latest_tag()
@@ -218,6 +220,7 @@ def main(args):
 
     if args.push_to_aws:
         aws_registry = log_into_aws_acr(args.tempdir)
+        check_aws_repository()
         docker_build_and_push_container(
             container, aws_registry, new_version, container_name_prefix
         )
