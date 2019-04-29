@@ -205,9 +205,7 @@ def docker_build_and_push_container(
 
 def check_aws(container_name):
     command = ['aws', 'ecr', 'describe-repositories', '--repository-names', container_name]
-    print "\n CHECKING IF REPO EXIST MUSQ"
-    output = Popen(command, stdout=PIPE).communicate()[0]
-    if output:
+    if Popen(command, stdout=PIPE).communicate()[0]:
         print "YES"
     else:
         print "NO"
