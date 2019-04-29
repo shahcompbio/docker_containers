@@ -205,7 +205,7 @@ def docker_build_and_push_container(
 
 def check_aws(container_name):
     print "LIST"
-    run_cmd(['aws', 'ecr', 'delete-repository', '--repository-name', container_name])
+    run_cmd(['aws', 'ecr', 'delete-repository', '--repository-name', "scp/test"])
     print Popen(['aws', 'ecr', 'describe-repositories'], stdout=PIPE).communicate()[0]
 
 
