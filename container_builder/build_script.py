@@ -150,7 +150,8 @@ def log_into_aws_acr(tempdir):
 
     login_command = ['aws', 'ecr', 'get-login', '--no-include-email']
     run_cmd(login_command, output=stdoutfile)
-    print stdoutfile
+    print "\nREADING LINES\n"
+    print open(stdoutfile).readlines()
     login_command = open(stdoutfile).readlines()
     assert len(login_command) == 1
     login_command = login_command[0].split()
