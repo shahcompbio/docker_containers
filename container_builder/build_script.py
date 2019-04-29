@@ -229,6 +229,11 @@ def main(args):
         output = Popen(command, stdout=PIPE).communicate()[0]
         print output
 
+        command = ['aws', 'ecr', 'describe-repositories', '--repository-names', "efjhiehfeihfie"]
+        print "\n CHECKING IF REPO EXIST MUSQ"
+        output = Popen(command, stdout=PIPE).communicate()[0]
+        print output
+
         docker_build_and_push_container(
             container, aws_registry, new_version, container_name_prefix
         )
