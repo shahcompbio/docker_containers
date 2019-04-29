@@ -45,7 +45,8 @@ def check_if_tag_valid(container_name, version):
     :param version: version string
     :type version: ver
     """
-    list_of_all_dirs = get_immediate_subdirectories(os.getcwd())
+    list_of_all_dirs = get_immediate_subdirectories(os.getcwd()+ "/scp")
+
     if container_name not in list_of_all_dirs:
         error_str = 'Could not find directory corresponding to' \
                       ' container {}. Please check the container ' \
@@ -169,7 +170,7 @@ def docker_build_and_push_container(
         container_name, registry_url, version, prefix
 ):
     """
-    :param container_name: name of container to builr
+    :param container_name: name of container to build
     :type container_name: str
     :param registry_url: url for registry to push to
     :type registry_url: str
