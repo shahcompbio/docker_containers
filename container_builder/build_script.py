@@ -45,8 +45,8 @@ def check_if_tag_valid(container_name, version):
     :param version: version string
     :type version: ver
     """
-    list_of_all_dirs = get_immediate_subdirectories(os.getcwd())
-    if container_name not in list_of_all_dirs:
+    list_of_all_dirs = get_immediate_subdirectories(os.getcwd()+ "/scp")
+    if container_name.replace('scp/','') not in list_of_all_dirs:
         error_str = 'Could not find directory corresponding to' \
                       ' container {}. Please check the container ' \
                       'name in tag'.format(container_name)
@@ -169,7 +169,7 @@ def docker_build_and_push_container(
         container_name, registry_url, version, prefix
 ):
     """
-    :param container_name: name of container to builr
+    :param container_name: name of container to build
     :type container_name: str
     :param registry_url: url for registry to push to
     :type registry_url: str
@@ -184,8 +184,9 @@ def docker_build_and_push_container(
     print 'building version {} of container {}'.format(version, container_name)
 
     currentdir = os.getcwd()
-
     os.chdir(container_name)
+    container_name = container_name.replace('scp/', '')
+
 
     command = ['docker', 'build', '-t', container_name, '.']
     run_cmd(command)
