@@ -203,6 +203,15 @@ def docker_build_and_push_container(
     os.chdir(currentdir)
 
 
+def check_aws(container_name):
+    command = ['aws', 'ecr', 'describe-repositories', '--repository-names', container_name]
+    print "\n CHECKING IF REPO EXIST MUSQ"
+    output = Popen(command, stdout=PIPE).communicate()[0]
+    if output:
+        print "YES"
+    else:
+        print "NO"
+
 def main(args):
     container, new_version = get_latest_tag()
 
@@ -218,22 +227,8 @@ def main(args):
 
     if args.push_to_aws:
         aws_registry = log_into_aws_acr(args.tempdir)
-
-        command = ['aws', 'ecr', 'describe-repositories']
-        print "\n CHECKING IF REPO EXIST"
-        output = Popen(command, stdout=PIPE).communicate()[0]
-        print output
-
-        command = ['aws', 'ecr', 'describe-repositories', '--repository-names', container]
-        print "\n CHECKING IF REPO EXIST MUSQ"
-        output = Popen(command, stdout=PIPE).communicate()[0]
-        print output
-
-        command = ['aws', 'ecr', 'describe-repositories', '--repository-names', "efjhiehfeihfie"]
-        print "\n CHECKING IF REPO EXIST MUSQ"
-        output = Popen(command, stdout=PIPE).communicate()[0]
-        print output
-
+        check_aws(container)
+        check_aws("simongsimong")
         docker_build_and_push_container(
             container, aws_registry, new_version, container_name_prefix
         )
