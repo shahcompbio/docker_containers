@@ -202,7 +202,7 @@ def docker_build_and_push_container(
     os.chdir(currentdir)
 
 
-def check_aws(container_name):
+def check_if_aws_repository_exist(container_name):
     if Popen(['aws', 'ecr', 'describe-repositories', '--repository-names', container_name], stdout=PIPE).communicate()[0]:
        print "Container Repository {} Exists.".format(container_name)
     else:
@@ -224,7 +224,7 @@ def main(args):
 
     if args.push_to_aws:
         aws_registry = log_into_aws_acr(args.tempdir)
-        check_aws(container)
+        check_if_aws_repository_exist(container)
         docker_build_and_push_container(
             container, aws_registry, new_version, container_name_prefix
         )
