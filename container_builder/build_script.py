@@ -204,13 +204,21 @@ def docker_build_and_push_container(
 
 
 def check_aws(container_name):
+    print "LIST"
+    run_cmd(['aws', 'ecr', 'delete-repository', '--repository-name', container_name])
+    print Popen(['aws', 'ecr', 'describe-repositories'], stdout=PIPE).communicate()[0]
+
+
     if Popen(['aws', 'ecr', 'describe-repositories', '--repository-names', container_name], stdout=PIPE).communicate()[0]:
        print "Container Repository {} Exists.".format(container_name)
     else:
         print "Creating Container Repository {}.".format(container_name)
         run_cmd(['aws', 'ecr', 'create-repository', '--repository-name', container_name])
-        print Popen(['aws', 'ecr', 'describe-repositories'], stdout=PIPE).communicate()[0]
+        print "DELETING"
         run_cmd(['aws', 'ecr', 'delete-repository', '--repository-name', container_name])
+        print "AFTER"
+        print Popen(['aws', 'ecr', 'describe-repositories'], stdout=PIPE).communicate()[0]
+
 def main(args):
     container, new_version = get_latest_tag()
 
