@@ -202,9 +202,12 @@ def docker_build_and_push_container(
     os.chdir(currentdir)
 
 def check_aws_repository(container_name):
-    command=['aws', 'ecr', 'describe-repositories', '--repository-names',container_name]
-    print "\n CHECKING IF REPO EXIST" + container_name
-    print run_cmd(command)
+    try:
+        command=['aws', 'ecr', 'describe-repositories', '--repository-names',container_name]
+        print "\n CHECKING IF REPO EXIST" + container_name
+        print run_cmd(command)
+    except:
+        pass
 
 def main(args):
     container, new_version = get_latest_tag()
