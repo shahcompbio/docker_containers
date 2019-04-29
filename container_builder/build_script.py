@@ -220,11 +220,12 @@ def main(args):
 
         command = ['aws', 'ecr', 'describe-repositories']
         print "\n CHECKING IF REPO EXIST"
-        print run_cmd(command)
+        print os.subprocess.check_output(command)
+
 
         command = ['aws', 'ecr', 'describe-repositories', '--repository-names', container]
         print "\n CHECKING IF REPO EXIST MUSQ"
-        print run_cmd(command)
+        print os.subprocess.check_output(command)
 
         docker_build_and_push_container(
             container, aws_registry, new_version, container_name_prefix
