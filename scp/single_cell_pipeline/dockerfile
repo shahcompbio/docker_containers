@@ -17,3 +17,4 @@ ENV NAME scpipeline
 
 # Run app.py when the container launches
 CMD ["python"]
+
