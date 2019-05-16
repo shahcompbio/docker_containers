@@ -2,7 +2,7 @@
 FROM continuumio/miniconda
 
 # Install basic packages
-RUN conda install -c conda-forge -c bioconda -c shahcompbio bioconductor-hmmcopy-single-cell -y
+RUN conda install -c r -c conda-forge -c bioconda -c shahcompbio -c dranew bioconductor-hmmcopy-single-cell -y
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
