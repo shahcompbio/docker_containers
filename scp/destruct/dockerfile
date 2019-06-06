@@ -7,7 +7,7 @@ ADD . /app
 # Install any needed packages specified in requirements.txt
 RUN conda install -c bioconda -c dranew destruct blossomv -y
 RUN rm -rf /opt/conda/lib/python2.7/site-packages/pypeliner* /opt/conda/lib/python2.7/site-packages/destruct*
-RUN pip install git+https://github.com/shahcompbio/single_cell_pipeline.git@v0.2.24
+RUN pip install git+https://github.com/shahcompbio/single_cell_pipeline.git@v0.2.25
 RUN pip install git+https://github.com/shahcompbio/pypeliner.git@v0.5.7
 RUN pip install git+https://bitbucket.org/aroth85/biowrappers.git@singlecell
 RUN pip install git+https://github.com/amcpherson/destruct.git@master
