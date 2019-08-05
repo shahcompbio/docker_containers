@@ -1,0 +1,22 @@
+# miniconda image with conda
+FROM wgscomputecr.azurecr.io/wgs/titan:base
+
+ADD . /app
+
+# Install basic packages
+#RUN apt-get update && apt-get install -y libltdl7 libreadline6-dev lib32readline7 && rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && apt-get install -y software-properties-common gnupg && add-apt-repository -y ppa:neurobin/ppa && apt-get install -y shc
+#RUN conda update -y conda
+RUN conda install -c shahcompbio -c r -c conda-forge -c bioconda bioconductor-titan
+#RUN conda install -c conda-forge r-plyr r-getopt r-data.table readline
+#RUN conda install -c conda-forge -c bioconda bioconductor-rsamtools bioconductor-iranges bioconductor-genomeinfodb && conda install -c shahcompbio bioconductor-titan #bioconductor-hmmcopy bioconductor-geneplotter && conda install -c dranew bioconductor-titan
+#RUN conda install -c conda-forge readline=6.2
+#RUN conda install -c bioconda bioconductor-snpchip bioconductor-rsamtools
+RUN cp /app/correctReads.R /app/titan.R /app/plot_titan.R /usr/bin/
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# set env name
+ENV NAME hmmcopy
+# Run python when the container launches
+CMD ["hmmcopy"]
