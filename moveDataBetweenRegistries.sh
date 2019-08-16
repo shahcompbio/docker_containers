@@ -6,7 +6,7 @@
 #[target]: target registry
 
 repos=( $(az acr repository list  -g [PUSH_FROM] -n [PUSH_FROM]  -o table) )
-for element in "${repos[@]:3}"
+for element in "${repos[@]:2}"
 do
     versions=($(az acr repository show-tags  -g [PUSH_FROM]-n [PUSH_FROM] -o table --repository ${element} -o table))
     nVersions=${#versions[@]}
