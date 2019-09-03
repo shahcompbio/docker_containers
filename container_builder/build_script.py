@@ -138,6 +138,17 @@ def log_into_azure_acr(registry_url):
     run_cmd(login_command)
 
 
+def log_into_dockerhub():
+    username = os.environ['DOCKERHUB_USERNAME']
+    password = os.environ['DOCKERHUB_PASSWORD']
+
+    login_command = [
+        'docker', 'login', '-u', username, '-p', password
+    ]
+
+    run_cmd(login_command)
+
+
 def log_into_aws_acr(tempdir):
     """
     :param tempdir: dir path to store intermediate files
@@ -192,6 +203,7 @@ def docker_build_and_push_container(
     run_cmd(command)
 
     container_url = '{}/{}/{}:{}'.format(registry_url, prefix, container_name, version)
+    container_url = container_url.strip('/')
 
     command = ["docker", "tag", container_name, container_url]
     run_cmd(command)
@@ -229,6 +241,12 @@ def main(args):
             container, aws_registry, new_version, container_name_prefix
         )
 
+    if args.dockerhub_namespace:
+        log_into_dockerhub()
+        docker_build_and_push_container(
+            container, '', new_version, args.dockerhub_namespace
+        )
+
 
 def parse_args():
     """
@@ -259,6 +277,11 @@ def parse_args():
     parser.add_argument('--container_name_prefix',
                         default='scp',
                         help='''container prefix''')
+
+    parser.add_argument('--dockerhub_namespace',
+                        default=None,
+                        help='''container prefix''')
+
 
     args = parser.parse_args()
 
