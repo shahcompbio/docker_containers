@@ -1,5 +1,5 @@
 # build on top of out base image
-FROM continuumio/miniconda
+FROM continuumio/miniconda3
 
 # Install any needed packages specified in requirements.txt
 RUN apt-get update && apt install autoconf make gcc zlib1g-dev  libcurl3-dev libssl-dev g++ -y && rm -rf /var/lib/apt/lists/*
