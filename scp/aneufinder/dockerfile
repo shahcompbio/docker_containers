@@ -10,7 +10,7 @@ RUN conda install -c dranew -c bioconda bioconductor-aneufinder bioconductor-bsg
 EXPOSE 80
 
 # set env name
-ENV NAME samtools
+ENV NAME aneufinder
 
 # Run python when the container launches
-CMD ["samtools"]
+CMD ["R"]
