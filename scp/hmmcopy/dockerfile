@@ -1,5 +1,5 @@
 # miniconda image with conda
-FROM continuumio/miniconda
+FROM continuumio/miniconda3
 
 # Install basic packages
 RUN conda install -c r -c conda-forge -c bioconda -c shahcompbio -c dranew bioconductor-hmmcopy-single-cell -y
