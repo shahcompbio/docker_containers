@@ -1,5 +1,5 @@
 # build on top of out base image
-FROM shahlab.azurecr.io/scp/python_singlecell_qc:v0.0.4
+FROM continuumio/miniconda3
 
 # Set the working directory to /app
 #WORKDIR /datadrive/singlecell/docker/app
