@@ -1,5 +1,5 @@
 # miniconda image with conda
-FROM continuumio/miniconda
+FROM continuumio/miniconda3
 
 # Install basic packages
 RUN apt-get update && apt-get install -y libltdl7 && rm -rf /var/lib/apt/lists/*
@@ -10,7 +10,7 @@ RUN conda install -c bioconda perl-vcftools-vcf==0.1.15
 EXPOSE 80
 
 # set env name
-ENV NAME samtools
+ENV NAME vcftools
 
 # Run python when the container launches
-CMD ["samtools"]
+CMD ["vcftools"]
