@@ -1,16 +1,18 @@
 # build on top of out base image
-FROM shahlab.azurecr.io/scp/python_singlecell_qc:v0.0.5
+FROM scdnadev.azurecr.io/scp/python_singlecell_qc:v0.1.0
 
 # Copy the current directory contents into the container at /app
 ADD . /app
 
 # Install any needed packages specified in requirements.txt
-RUN conda install -c bioconda -c dranew destruct blossomv -y
-RUN rm -rf /opt/conda/lib/python2.7/site-packages/pypeliner* /opt/conda/lib/python2.7/site-packages/destruct*
-RUN pip install git+https://github.com/shahcompbio/single_cell_pipeline.git@v0.2.25
-RUN pip install git+https://github.com/shahcompbio/pypeliner.git@v0.5.7
+RUN apt-get update && apt install build-essential gcc -y && rm -rf /var/lib/apt/lists/*
+RUN conda install -c bioconda -c dranew destruct destruct_utils  -y
+RUN rm -rf /opt/conda/lib/python3.7/site-packages/pypeliner* /opt/conda/lib/python3.7/site-packages/single_cell_pipeline* /opt/conda/lib/python3.7/site-packages/destruct*
+RUN pip install git+https://github.com/shahcompbio/single_cell_pipeline.git@v0.4.0
+RUN pip install git+https://github.com/shahcompbio/pypeliner.git@v0.5.9
 RUN pip install git+https://bitbucket.org/aroth85/biowrappers.git@singlecell
 RUN pip install git+https://github.com/amcpherson/destruct.git@master
+RUN pip install -e git+https://github.com/amcpherson/blossomv.git#egg=blossomv
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
