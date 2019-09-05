@@ -4,4 +4,4 @@ VER=$3
 
 
 
-cd $NAME && docker build -t ${SERVER}/scp/${NAME}:${VER} . --no-cache && docker push ${SERVER}/scp/${NAME}:${VER}
+cd $NAME && docker build -t ${SERVER}/singlecellpipeline/${NAME}:${VER} .  && docker push ${SERVER}/singlecellpipeline/${NAME}:${VER}
