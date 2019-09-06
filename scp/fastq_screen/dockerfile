@@ -1,0 +1,14 @@
+# miniconda image with conda
+FROM continuumio/miniconda3
+
+# Install basic packages
+RUN conda install -c compbiocore fastq-screen
+RUN conda install -c bioconda bwa==0.7.17
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# set env name
+ENV NAME fastq_screen
+
+# Run python when the container launches
+CMD ["fastq_screen"]
