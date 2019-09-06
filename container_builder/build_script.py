@@ -45,8 +45,15 @@ def check_if_tag_valid(container_name, version):
     :param version: version string
     :type version: ver
     """
-    list_of_all_dirs = get_immediate_subdirectories(os.getcwd()+ "/scp")
-    if container_name.replace('scp/','') not in list_of_all_dirs:
+    container_name_split = container_name.strip('/').split('/')
+
+    assert len(container_name_split) == 2
+
+    root_dir = container_name_split[0]
+    container_dirname = container_name_split[1]
+
+    list_of_all_dirs = get_immediate_subdirectories(os.path.join(os.getcwd(), root_dir))
+    if container_dirname not in list_of_all_dirs:
         error_str = 'Could not find directory corresponding to' \
                       ' container {}. Please check the container ' \
                       'name in tag'.format(container_name)
@@ -192,7 +199,7 @@ def docker_build_and_push_container(
 
     check_if_tag_valid(container_name, version)
 
-    print 'building version {} of container {}'.format(version, container_name)
+    print('building version {} of container {}'.format(version, container_name))
 
     currentdir = os.getcwd()
     os.chdir(container_name)
@@ -216,9 +223,9 @@ def docker_build_and_push_container(
 
 def check_if_aws_repository_exist(container_name):
     if Popen(['aws', 'ecr', 'describe-repositories', '--repository-names', container_name], stdout=PIPE).communicate()[0]:
-       print "Container Repository {} Exists.".format(container_name)
+       print("Container Repository {} Exists.".format(container_name))
     else:
-        print "Creating Container Repository {}.".format(container_name)
+        print("Creating Container Repository {}.".format(container_name))
         run_cmd(['aws', 'ecr', 'create-repository', '--repository-name', container_name])
 
 def main(args):
