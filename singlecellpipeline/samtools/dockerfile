@@ -2,7 +2,7 @@
 FROM continuumio/miniconda3
 
 # Install basic packages
-RUN apt-get update && apt-get install -y libltdl7 && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libltdl7 parallel && rm -rf /var/lib/apt/lists/*
 RUN conda update -y conda
 RUN conda install -c bioconda -c conda-forge samtools
 RUN conda install -c bioconda vcftools tabix bcftools
