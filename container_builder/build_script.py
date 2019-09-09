@@ -213,7 +213,8 @@ def load_credentials(credentials_yaml):
     return data
 
 
-def login_remotes(creds, remotes):
+def login_remotes(creds, remotes, tempdir):
+    makedirs(tempdir)
     for remote in remotes:
         if 'azurecr.io' in remote:
             log_into_azure_acr(
@@ -221,7 +222,7 @@ def login_remotes(creds, remotes):
             )
         elif 'amazonaws.com' in remote:
             log_into_aws_acr(
-                remote, creds['aws']['username'], creds['aws']['password'],
+                tempdir, creds['aws']['username'], creds['aws']['password'],
                 creds['aws']['region']
             )
         else:
@@ -271,7 +272,7 @@ def docker_build_and_push_container(
 def main(args):
     container, version = get_latest_tag()
     credentials = load_credentials(args.credentials)
-    login_remotes(credentials, args.remotes)
+    login_remotes(credentials, args.remotes, args.tempdir)
 
     docker_build_and_push_container(
         container, version, args.remotes
