@@ -1,15 +1,22 @@
-import os
-import errno
-import warnings
 import argparse
-from git import Git, Repo
+import errno
+import os
+import warnings
 from subprocess import Popen, PIPE
+
+import yaml
+from git import Repo
+
+
+class CommandLineException(Exception):
+    pass
 
 
 class TagFormatError(Exception):
     """
     Exception for cases when tag is not formatted correctly
     """
+
     def __init__(self, message):
         message = "Tag {} is not formatted correctly." \
                   "The tags should start with container name" \
@@ -18,6 +25,7 @@ class TagFormatError(Exception):
         # self.message = message
 
         super(TagFormatError, self).__init__(message)
+
 
 class InvalidTag(Exception):
     """
@@ -38,6 +46,17 @@ def makedirs(directory):
             raise
 
 
+def parse_container_name(container_name):
+    container_name_split = container_name.strip('/').split('/')
+
+    assert len(container_name_split) == 2
+
+    namespace = container_name_split[0]
+    container_name = container_name_split[1]
+
+    return namespace, container_name
+
+
 def check_if_tag_valid(container_name, version):
     """
     :param container_name: name of container
@@ -45,24 +64,19 @@ def check_if_tag_valid(container_name, version):
     :param version: version string
     :type version: ver
     """
-    container_name_split = container_name.strip('/').split('/')
+    namespace, container_name = parse_container_name(container_name)
 
-    assert len(container_name_split) == 2
-
-    root_dir = container_name_split[0]
-    container_dirname = container_name_split[1]
-
-    list_of_all_dirs = get_immediate_subdirectories(os.path.join(os.getcwd(), root_dir))
-    if container_dirname not in list_of_all_dirs:
+    list_of_all_dirs = get_immediate_subdirectories(os.path.join(os.getcwd(), namespace))
+    if container_name not in list_of_all_dirs:
         error_str = 'Could not find directory corresponding to' \
-                      ' container {}. Please check the container ' \
-                      'name in tag'.format(container_name)
+                    ' container {}. Please check the container ' \
+                    'name in tag'.format(container_name)
         raise InvalidTag(error_str)
 
     if not version.startswith('v'):
         raise InvalidTag('versions should start with v')
 
-    version = version.split(',')
+    version = version.split('.')
     if len(version) > 3 and not version[-1].startswith('rc'):
         warnings.warn('please follow semantic versioning guidelines')
 
@@ -122,7 +136,7 @@ def run_cmd(cmd, output=None):
     retc = p.returncode
 
     if retc:
-        raise Exception(
+        raise CommandLineException(
             "command failed. stderr:{}, stdout:{}".format(
                 cmdout,
                 cmderr))
@@ -131,24 +145,18 @@ def run_cmd(cmd, output=None):
         stdout.close()
 
 
-def log_into_azure_acr(registry_url):
+def log_into_azure_acr(registry_url, username, password):
     """
     :param registry_url: azure registry url
     :type registry_url: str
     """
-    username = os.environ['CLIENT_ID']
-    password = os.environ['SECRET_KEY']
-
     login_command = [
         "docker", "login", registry_url, "-u", username, "--password", password
     ]
     run_cmd(login_command)
 
 
-def log_into_dockerhub():
-    username = os.environ['DOCKERHUB_USERNAME']
-    password = os.environ['DOCKERHUB_PASSWORD']
-
+def log_into_dockerhub(username, password):
     login_command = [
         'docker', 'login', '-u', username, '-p', password
     ]
@@ -156,13 +164,18 @@ def log_into_dockerhub():
     run_cmd(login_command)
 
 
-def log_into_aws_acr(tempdir):
+def log_into_aws_acr(tempdir, username, password, region):
     """
     :param tempdir: dir path to store intermediate files
     :type tempdir: str
     :return: registry url
     :rtype: str
     """
+
+    os.environ['AWS_ACCESS_KEY_ID'] = username
+    os.environ['AWS_SECRET_ACCESS_KEY'] = password
+    os.environ['AWS_DEFAULT_REGION'] = region
+
     makedirs(tempdir)
     stdoutfile = os.path.join(tempdir, 'aws_login_output.txt')
 
@@ -183,8 +196,42 @@ def log_into_aws_acr(tempdir):
     return registry_url
 
 
+def check_if_aws_repository_exist(container_name):
+    cmd = ['aws', 'ecr', 'describe-repositories', '--repository-names', container_name]
+
+    try:
+        run_cmd(cmd)
+    except CommandLineException:
+        print("Creating Container Repository {}.".format(container_name))
+        run_cmd(['aws', 'ecr', 'create-repository', '--repository-name', container_name])
+
+
+def load_credentials(credentials_yaml):
+    with open(credentials_yaml) as creds:
+        data = yaml.load(creds)
+
+    return data
+
+
+def login_remotes(creds, remotes):
+    for remote in remotes:
+        if 'azurecr.io' in remote:
+            log_into_azure_acr(
+                remote, creds['azure']['username'], creds['azure']['password']
+            )
+        elif 'amazonaws.com' in remote:
+            log_into_aws_acr(
+                remote, creds['aws']['username'], creds['aws']['password'],
+                creds['aws']['region']
+            )
+        else:
+            log_into_dockerhub(
+                creds['dockerhub']['username'], creds['dockerhub']['password']
+            )
+
+
 def docker_build_and_push_container(
-        container_name, registry_url, version, prefix
+        container, version, remotes
 ):
     """
     :param container_name: name of container to build
@@ -197,62 +244,38 @@ def docker_build_and_push_container(
     :type prefix: str
     """
 
-    check_if_tag_valid(container_name, version)
-
-    print('building version {} of container {}'.format(version, container_name))
+    check_if_tag_valid(container, version)
 
     currentdir = os.getcwd()
-    os.chdir(container_name)
-    container_name = container_name.replace('scp/', '')
+    os.chdir(container)
 
-
-    command = ['docker', 'build', '-t', container_name, '.']
+    command = ['docker', 'build', '-t', container, '.']
     run_cmd(command)
 
-    container_url = '{}/{}/{}:{}'.format(registry_url, prefix, container_name, version)
-    container_url = container_url.strip('/')
+    for remote in remotes:
+        if 'amazonaws.com' in remote:
+            check_if_aws_repository_exist(container)
 
-    command = ["docker", "tag", container_name, container_url]
-    run_cmd(command)
+        container_url = '{}/{}:{}'.format(remote, container, version)
+        container_url = container_url.strip('/')
 
-    command = ['docker', 'push', container_url]
-    run_cmd(command)
+        command = ["docker", "tag", container, container_url]
+        run_cmd(command)
+
+        command = ['docker', 'push', container_url]
+        run_cmd(command)
 
     os.chdir(currentdir)
 
 
-def check_if_aws_repository_exist(container_name):
-    if Popen(['aws', 'ecr', 'describe-repositories', '--repository-names', container_name], stdout=PIPE).communicate()[0]:
-       print("Container Repository {} Exists.".format(container_name))
-    else:
-        print("Creating Container Repository {}.".format(container_name))
-        run_cmd(['aws', 'ecr', 'create-repository', '--repository-name', container_name])
-
 def main(args):
-    container, new_version = get_latest_tag()
+    container, version = get_latest_tag()
+    credentials = load_credentials(args.credentials)
+    login_remotes(credentials, args.remotes)
 
-    container_name_prefix = args.container_name_prefix
-
-    if args.push_to_azure:
-        azure_registry_url = args.azure_registry_url
-        log_into_azure_acr(azure_registry_url)
-        docker_build_and_push_container(
-            container, azure_registry_url,
-            new_version, container_name_prefix
-        )
-
-    if args.push_to_aws:
-        aws_registry = log_into_aws_acr(args.tempdir)
-        check_if_aws_repository_exist(container)
-        docker_build_and_push_container(
-            container, aws_registry, new_version, container_name_prefix
-        )
-
-    if args.dockerhub_namespace:
-        log_into_dockerhub()
-        docker_build_and_push_container(
-            container, '', new_version, args.dockerhub_namespace
-        )
+    docker_build_and_push_container(
+        container, version, args.remotes
+    )
 
 
 def parse_args():
@@ -267,28 +290,13 @@ def parse_args():
                         required=True,
                         help='''dir to store temp files''')
 
-    parser.add_argument('--push_to_azure',
-                        default=False,
-                        action='store_true',
-                        help='''push container to azure''')
+    parser.add_argument('--credentials',
+                        required=True,
+                        help='''yaml file with credentials''')
 
-    parser.add_argument('--push_to_aws',
-                        default=False,
-                        action='store_true',
-                        help='''push container to aws''')
-
-    parser.add_argument('--azure_registry_url',
-                        default='shahlab.azurecr.io',
-                        help='''azure container registry url''')
-
-    parser.add_argument('--container_name_prefix',
-                        default='scp',
-                        help='''container prefix''')
-
-    parser.add_argument('--dockerhub_namespace',
-                        default=None,
-                        help='''container prefix''')
-
+    parser.add_argument('--remotes',
+                        required=True,
+                        nargs='*')
 
     args = parser.parse_args()
 
@@ -296,6 +304,6 @@ def parse_args():
 
 
 if __name__ == "__main__":
-        args = parse_args()
+    args = parse_args()
 
-        main(args)
+    main(args)
