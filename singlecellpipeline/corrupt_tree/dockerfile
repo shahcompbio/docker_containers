@@ -1,18 +1,12 @@
-# miniconda image with conda
-FROM scdnaprod.azurecr.io/singlecellpipeline/r_base:v0.0.1
+FROM continuumio/miniconda
 
 ADD . /app
 
-# Install basic packages
-RUN conda install -c anaconda openjdk 
+RUN conda install -c anaconda openjdk
 RUN cd /tmp && git clone https://github.com/UBC-Stat-ML/nowellpack.git && cd ./nowellpack/ && git checkout 83f19ba243d6916fa6dbac0bb507eca25fd8de6a && ./gradlew installDist && cp ./build/install/nowellpack/bin/* /usr/bin/ && cp ./build/install/nowellpack/lib/* /usr/lib/
-RUN Rscript -e 'install.packages("optparse", repos="https://cran.rstudio.com")'
-RUN cp /app/scripts/* /usr/bin/
-RUN apt-get update && apt-get install xvfb libxtst6 libfontconfig1 libxrender1 -y
-# Make port 80 available to the world outside this container
+#RUN conda install -c conda-forge r r-data.table r-tidyr r-optparse r-dplyr r-r.utils r-reshape2 r-ggplot2 r-stringr
+#RUN cp /app/scripts/* /usr/bin/
+RUN apt-get update && apt-get install xvfb -y
+# libxtst6 -y
 EXPOSE 80
-
-# set env name
 ENV NAME corrupt-tree
-# Run python when the container launches
-CMD ["R"]

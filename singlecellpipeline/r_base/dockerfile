@@ -1,7 +1,7 @@
-FROM continuumio/miniconda3
+FROM continuumio/miniconda
 
-RUN conda install -c r r r-data.table r-tidyr r-dplyr r-r.utils r-reshape2 r-ggplot2 r-stringr r-plyr r-getopt
-RUN conda install -c bioconda bioconductor-iranges bioconductor-geneplotter bioconductor-genomeinfodb 
+RUN conda install -c conda-forge r r-data.table r-tidyr r-optparse r-dplyr r-r.utils r-reshape2 r-ggplot2 r-stringr #r-plyr r-getopt
+#RUN conda install -c bioconda bioconductor-iranges bioconductor-geneplotter bioconductor-genomeinfodb 
 
 ENV NAME r_base
 
