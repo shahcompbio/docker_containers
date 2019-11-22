@@ -3,6 +3,7 @@ FROM scdnaprod.azurecr.io/singlecellpipeline/r_base:v0.0.1
 
 # Install basic packages
 RUN conda install -c r -c conda-forge -c bioconda -c dranew -c shahcompbio bioconductor-hmmcopy-single-cell -y
+
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
