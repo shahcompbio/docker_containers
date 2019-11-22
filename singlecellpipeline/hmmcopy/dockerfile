@@ -8,5 +8,6 @@ EXPOSE 80
 
 # set env name
 ENV NAME hmmcopy
+
 # Run python when the container launches
 CMD ["hmmcopy_single_cell.R"]
