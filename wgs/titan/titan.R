@@ -25,7 +25,7 @@ txn_z_strength = as.numeric(args[17])
 alphaK <- as.numeric(args[18])        #prior for events; default: 15000
 alphaHigh <- as.numeric(args[19])     #prior for extreme events; default: 15000
 maxCN <- as.numeric(args[20])         #maximum number of copies to use
-sym <- args[21]
+sym <- eval(parse(text=args[21]))
 outobj <- args[22]
 genometype <- args[23]
 chrom <- args[24]
