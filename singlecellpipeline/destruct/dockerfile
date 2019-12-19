@@ -7,8 +7,8 @@ ADD . /app
 # Install any needed packages specified in requirements.txt
 RUN apt-get update && apt install build-essential gcc -y && rm -rf /var/lib/apt/lists/*
 RUN conda install -c bioconda -c dranew destruct destruct_utils  -y
-RUN pip install git+https://github.com/shahcompbio/pypeliner.git@v0.5.13
-RUN pip install git+https://github.com/shahcompbio/biowrappers.git@v0.2.1
+RUN pip install git+https://github.com/shahcompbio/pypeliner.git@v0.5.14
+RUN pip install git+https://github.com/shahcompbio/biowrappers.git@v0.2.2
 RUN pip install git+https://github.com/amcpherson/destruct.git@v0.4.16
 RUN pip install -e git+https://github.com/amcpherson/blossomv.git#egg=blossomv
 # Make port 80 available to the world outside this container
