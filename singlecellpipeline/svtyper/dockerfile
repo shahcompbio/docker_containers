@@ -1,4 +1,4 @@
-FROM scdnaprod.azurecr.io/singlecellpipeline/python_singlecell_qc:v0.1.0
+FROM continuumio/miniconda
 
 RUN apt-get update && apt install autoconf make gcc zlib1g-dev libbz2-dev liblzma-dev libcurl3-dev libssl-dev g++ -y && rm -rf /var/lib/apt/lists/*
 RUN pip install git+https://github.com/hall-lab/svtyper.git
