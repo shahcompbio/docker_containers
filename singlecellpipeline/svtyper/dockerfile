@@ -1,0 +1,13 @@
+FROM scdnaprod.azurecr.io/singlecellpipeline/python_singlecell_qc:v0.1.0
+
+RUN apt-get update && apt install autoconf make gcc zlib1g-dev libbz2-dev liblzma-dev libcurl3-dev libssl-dev g++ -y && rm -rf /var/lib/apt/lists/*
+RUN pip install git+https://github.com/hall-lab/svtyper.git
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# Define environment variable
+ENV NAME svtyper
+
+
+CMD ["svtyper"]
