@@ -13,5 +13,5 @@ RUN pip install azure-storage azure-batch futures azure-mgmt azure.storage.commo
 # Make port 80 available to the world outside this container
 EXPOSE 80
 
-# Run python when the container launches
+# Run python on container launch
 CMD ["python"]
