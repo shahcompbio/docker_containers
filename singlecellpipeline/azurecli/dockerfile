@@ -1,0 +1,11 @@
+# miniconda image with conda
+FROM continuumio/miniconda3
+
+# Install basic packages
+RUN pip install azurecli
+
+# set env name
+ENV NAME azurecli
+
+# Run python when the container launches
+CMD ["az"]
