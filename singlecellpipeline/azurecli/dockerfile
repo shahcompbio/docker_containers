@@ -2,7 +2,7 @@
 FROM continuumio/miniconda3
 
 # Install basic packages
-RUN pip install azurecli
+RUN pip install azure-cli
 
 # set env name
 ENV NAME azurecli
