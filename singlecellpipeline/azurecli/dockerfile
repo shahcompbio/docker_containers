@@ -7,5 +7,5 @@ RUN pip install azurecli
 # set env name
 ENV NAME azurecli
 
-# Run python when the container launches
+# Run az when the container launches
 CMD ["az"]
