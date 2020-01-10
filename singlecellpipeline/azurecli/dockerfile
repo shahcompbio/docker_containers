@@ -2,6 +2,7 @@
 FROM continuumio/miniconda3
 
 # Install basic packages
+RUN apt-get update && apt-get install libc-dev libz-dev -y && apt-get install build-essential -y && rm -rf /var/lib/apt/lists/*
 RUN pip install azure-cli
 
 # set env name
