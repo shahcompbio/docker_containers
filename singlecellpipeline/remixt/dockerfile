@@ -18,4 +18,4 @@ EXPOSE 80
 ENV NAME remixt
 
 # Run app.py when the container launches
-CMD ["python"]
+CMD ["remixt"]
