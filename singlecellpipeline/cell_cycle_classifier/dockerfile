@@ -1,9 +1,6 @@
 # build on top of out base image
 FROM continuumio/miniconda3
 
-# Copy the current directory contents into the container at /app
-ADD . /app
-
 # Install any needed packages specified in requirements.txt
 RUN pip install git+https://github.com/shahcompbio/cell_cycle_classifier.git@v0.0.2
 RUN pip install pandas seaborn scikit-learn
