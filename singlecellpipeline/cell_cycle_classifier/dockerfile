@@ -11,5 +11,5 @@ EXPOSE 80
 # Define environment variable
 ENV NAME cell_cycle_classifier
 
-# Run app.py when the container launches
+# Run cell cycle  when the container launches
 CMD ["cell_cycle_classifier"]
