@@ -46,17 +46,6 @@ def makedirs(directory):
             raise
 
 
-def parse_container_name(container_name):
-    container_name_split = container_name.strip('/').split('/')
-
-    assert len(container_name_split) == 2
-
-    namespace = container_name_split[0]
-    container_name = container_name_split[1]
-
-    return namespace, container_name
-
-
 def check_if_tag_valid(container_name, version):
     """
     :param container_name: name of container
@@ -64,9 +53,8 @@ def check_if_tag_valid(container_name, version):
     :param version: version string
     :type version: ver
     """
-    namespace, container_name = parse_container_name(container_name)
 
-    list_of_all_dirs = get_immediate_subdirectories(os.path.join(os.getcwd(), namespace))
+    list_of_all_dirs = get_immediate_subdirectories(os.path.join(os.getcwd(), 'dockerfiles'))
     if container_name not in list_of_all_dirs:
         error_str = 'Could not find directory corresponding to' \
                     ' container {}. Please check the container ' \
@@ -248,7 +236,7 @@ def docker_build_and_push_container(
     check_if_tag_valid(container, version)
 
     currentdir = os.getcwd()
-    os.chdir(container)
+    os.chdir(os.path.join('dockerfiles',container))
 
     command = ['docker', 'build', '-t', container, '.']
     run_cmd(command)
