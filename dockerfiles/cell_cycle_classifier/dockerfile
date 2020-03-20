@@ -11,5 +11,5 @@ EXPOSE 80
 # Define environment variable
 ENV NAME cell_cycle_classifier
 
-# Run cell cycle  when the container launches
+# Run cell cycle on container launch
 CMD ["cell_cycle_classifier"]
