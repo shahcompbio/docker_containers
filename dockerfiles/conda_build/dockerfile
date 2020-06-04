@@ -1,0 +1,14 @@
+# miniconda image with conda
+FROM continuumio/miniconda3
+
+# Install basic packages
+RUN conda update --yes -q conda && conda config --set always_yes true && conda config --set anaconda_upload no && conda install conda-build anaconda-client setuptools nose numpy cython
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# set env name
+ENV NAME samtools
+
+# Run python when the container launches
+CMD ["samtools"]
