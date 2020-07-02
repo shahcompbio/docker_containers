@@ -1,0 +1,12 @@
+# miniconda image with conda
+FROM continuumio/miniconda3
+
+# Install basic packages
+RUN apt-get update && apt-get install libc-dev libz-dev -y && apt-get install build-essential -y && rm -rf /var/lib/apt/lists/*
+RUN pip install awscli
+
+# set env name
+ENV NAME awscli
+
+# Run az when the container launches
+CMD ["aws"]
