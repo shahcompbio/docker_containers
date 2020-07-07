@@ -117,7 +117,13 @@ def run_cmd(cmd, output=None):
     if output:
         stdout = open(output, "w")
 
-    p = Popen(cmd, stdout=stdout, stderr=PIPE)
+    cmd = ' '.join(cmd)
+    print(cmd)
+    import os
+
+    os.system(cmd)
+
+    p = Popen(cmd, stdout=stdout, stderr=PIPE, shell=True)
 
     cmdout, cmderr = p.communicate()
 
@@ -194,28 +200,21 @@ def check_if_aws_repository_exist(container_name):
         run_cmd(['aws', 'ecr', 'create-repository', '--repository-name', container_name])
 
 
-def load_credentials(credentials_yaml):
-    with open(credentials_yaml) as creds:
-        data = yaml.load(creds)
-
-    return data
-
-
-def login_remotes(creds, remotes, tempdir):
+def login_remotes(remotes, tempdir):
     makedirs(tempdir)
     for remote in remotes:
         if 'azurecr.io' in remote:
             log_into_azure_acr(
-                remote, creds['azure']['username'], creds['azure']['password']
+                remote, os.environ['AZURE_USER'], os.environ['AZURE_PASSWORD']
             )
         elif 'amazonaws.com' in remote:
             log_into_aws_acr(
-                tempdir, creds['aws']['username'], creds['aws']['password'],
-                creds['aws']['region']
+                tempdir, os.environ['AWS_USER'], os.environ['AWS_PASSWORD'],
+                os.environ['AWS_REGION']
             )
         else:
             log_into_dockerhub(
-                creds['dockerhub']['username'], creds['dockerhub']['password']
+                os.environ['DOCKERHUB_USER'], os.environ['DOCKERHUB_PASSWORD']
             )
 
 
@@ -259,8 +258,7 @@ def docker_build_and_push_container(
 
 def main(args):
     container, version = get_latest_tag()
-    credentials = load_credentials(args.credentials)
-    login_remotes(credentials, args.remotes, args.tempdir)
+    login_remotes(args.remotes, args.tempdir)
 
     docker_build_and_push_container(
         container, version, args.remotes
