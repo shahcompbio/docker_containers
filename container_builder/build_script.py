@@ -117,13 +117,7 @@ def run_cmd(cmd, output=None):
     if output:
         stdout = open(output, "w")
 
-    cmd = ' '.join(cmd)
-    print(cmd)
-    import os
-
-    os.system(cmd)
-
-    p = Popen(cmd, stdout=stdout, stderr=PIPE, shell=True)
+    p = Popen(cmd, stdout=stdout, stderr=PIPE)
 
     cmdout, cmderr = p.communicate()
 
@@ -276,10 +270,6 @@ def parse_args():
     parser.add_argument('--tempdir',
                         required=True,
                         help='''dir to store temp files''')
-
-    parser.add_argument('--credentials',
-                        required=True,
-                        help='''yaml file with credentials''')
 
     parser.add_argument('--remotes',
                         required=True,
