@@ -1,0 +1,14 @@
+# miniconda image with conda
+FROM continuumio/miniconda3
+
+# Install basic packages
+RUN conda install -c conda-forge -c shahcompbio pseudobulk_qc_html_report -y
+
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
+# set env name
+ENV NAME pseudobulk_qc_html_report
+
+# Run python when the container launches
+CMD ["R"]
