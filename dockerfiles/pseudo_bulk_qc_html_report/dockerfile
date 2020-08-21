@@ -2,7 +2,7 @@
 FROM continuumio/miniconda3
 
 # Install basic packages
-RUN conda install -c conda-forge -c shahcompbio pseudobulk_qc_html_report -y
+RUN conda install -c conda-forge -c shahcompbio pseudo_bulk_qc_html_report -y
 
 # Make port 80 available to the world outside this container
 EXPOSE 80
