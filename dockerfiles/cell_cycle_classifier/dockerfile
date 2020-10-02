@@ -2,7 +2,7 @@
 FROM continuumio/miniconda3
 
 # Install any needed packages specified in requirements.txt
-RUN pip install git+https://github.com/shahcompbio/cell_cycle_classifier.git@v0.0.2
+RUN pip install git+https://github.com/shahcompbio/cell_cycle_classifier.git@master
 RUN pip install pandas seaborn scikit-learn
 #RUN pip uninstall matplotlib -y && python -m pip install --upgrade pip && pip install matplotlib
 # Make port 80 available to the world outside this container
