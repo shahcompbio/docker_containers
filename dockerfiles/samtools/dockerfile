@@ -4,7 +4,9 @@ FROM continuumio/miniconda3
 # Install basic packages
 RUN apt-get update && apt-get install -y libltdl7 parallel && rm -rf /var/lib/apt/lists/*
 RUN conda update -y conda
-RUN conda install -c bioconda -c conda-forge samtools vcftools tabix bcftools
+RUN conda install -c bioconda samtools
+RUN conda install -c conda-forge openssl=1.0
+RUN conda install -c bioconda vcftools tabix bcftools
 RUN conda install -c bioconda perl-vcftools-vcf==0.1.15
 RUN conda install -c conda-forge cryptography
 # Make port 80 available to the world outside this container
